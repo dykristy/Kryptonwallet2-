@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Krypton Wallet - Add Funds</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .copy-btn {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="text-white p-4">
+
+  <!-- Language Selector -->
+  <div class="flex justify-end mb-4">
+    <select id="langSelect" class="bg-gray-800 p-2 rounded text-sm">
+      <option value="en">English</option>
+      <option value="pt">Português</option>
+      <option value="de">Deutsch</option>
+      <option value="es">Español</option>
+    </select>
+  </div>
+
+  <!-- Page Title -->
+  <h1 class="text-xl font-bold text-green-400 mb-4" data-translate="add_funds_title">Add Funds</h1>
+
+  <!-- Payment Method Toggle -->
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <button onclick="showCrypto()" class="bg-blue-700 p-3 rounded-xl font-semibold">Crypto</button>
+    <button onclick="showBank()" class="bg-gray-700 p-3 rounded-xl font-semibold">Bank Transfer</button>
+  </div>
+
+  <!-- Crypto Methods -->
+  <div id="cryptoMethods" class="space-y-4 hidden">
+    <div class="bg-gray-800 p-4 rounded-xl flex justify-between items-center">
+      <div>
+        <p class="text-sm font-semibold">TRC-20 (USDT)</p>
+        <p class="text-xs text-gray-400" id="trcAddress">TXDgsvVTPJEaiuJtNhtTpytG3WVXLbucRL</p>
+      </div>
+      <button onclick="copyToClipboard('trcAddress')" class="bg-green-600 px-3 py-1 text-sm rounded copy-btn">Copy</button>
+    </div>
+    <div class="bg-gray-800 p-4 rounded-xl flex justify-between items-center">
+      <div>
+        <p class="text-sm font-semibold">BTC (Bitcoin)</p>
+        <p class="text-xs text-gray-400" id="btcAddress">1LapbpAPfmTJYLPw1PoVsAH2LMSJNj5ETP</p>
+      </div>
+      <button onclick="copyToClipboard('btcAddress')" class="bg-yellow-500 px-3 py-1 text-sm rounded copy-btn">Copy</button>
+    </div>
+  </div>
+
+  <!-- Bank Transfer Message -->
+  <div id="bankMessage" class="hidden text-center mt-6">
+    <p class="text-red-400 mb-3" data-translate="bank_unavailable">Unfortunately this payment method isn't available at the moment.</p>
+    <a href="https://t.me/Kryptonplans" target="_blank" class="inline-block mt-2 px-4 py-2 bg-blue-600 rounded-xl text-white text-sm font-semibold" data-translate="speak_agent">Speak to an agent</a>
+  </div>
+
+  <script>
+    function showCrypto() {
+      document.getElementById('cryptoMethods').classList.remove('hidden');
+      document.getElementById('bankMessage').classList.add('hidden');
+    }
+
+    function showBank() {
+      document.getElementById('cryptoMethods').classList.add('hidden');
+      document.getElementById('bankMessage').classList.remove('hidden');
+    }
+
+    function copyToClipboard(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Address copied to clipboard!');
+      });
+    }
+
+    // Translation logic
+    const translations = {
+      pt: {
+        add_funds_title: "Adicionar Fundos",
+        bank_unavailable: "Infelizmente, este método de pagamento não está disponível no momento.",
+        speak_agent: "Falar com um agente"
+      },
+      de: {
+        add_funds_title: "Geld hinzufügen",
+        bank_unavailable: "Leider ist diese Zahlungsmethode derzeit nicht verfügbar.",
+        speak_agent: "Mit einem Agenten sprechen"
+      },
+      es: {
+        add_funds_title: "Agregar Fondos",
+        bank_unavailable: "Desafortunadamente, este método de pago no está disponible en este momento.",
+        speak_agent: "Hablar con un agente"
+      }
+    };
+
+    document.getElementById('langSelect').addEventListener('change', function () {
+      const lang = this.value;
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (translations[lang]?.[key]) {
+          el.innerText = translations[lang][key];
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
+
+

@@ -1,0 +1,230 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Krypton Wallet - Home</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .animated-bg {
+      background: linear-gradient(270deg, #1e3a8a, #9333ea, #10b981);
+      background-size: 600% 600%;
+      animation: backgroundShift 10s ease infinite;
+    }
+    @keyframes backgroundShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+</head>
+<body class="text-white min-h-screen p-4">
+
+  <!-- Animated Header -->
+  <div class="animated-bg p-3 rounded-xl text-center mb-6">
+    <h1 class="text-xl font-bold tracking-widest text-white animate-pulse">Live Crypto Wallet Dashboard</h1>
+  </div>
+
+  <!-- Language Translator -->
+  <div class="flex justify-end mb-4">
+    <select id="languageSelector" class="bg-gray-800 text-white text-sm p-2 rounded border border-gray-600">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="fr">Français</option>
+      <option value="de">Deutsch</option>
+      <option value="pt">Português</option>
+      <option value="ko">한국어</option>
+      <option value="ru">Русский</option>
+      <option value="ro">Română</option>
+    </select>
+  </div>
+
+  <!-- Header -->
+  <div class="text-center mb-6">
+    <h1 class="text-2xl font-bold text-blue-400 tracking-widest" data-translate="krypton_wallet">KRYPTON WALLET</h1>
+    <p class="text-gray-400 text-sm" data-translate="secure_vault">Your Secure Crypto Vault</p>
+  </div>
+
+  <!-- Balance Display -->
+  <div class="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 p-6 rounded-2xl shadow-md text-center mb-6">
+    <p class="text-sm text-blue-300" data-translate="available_balance">Available Balance</p>
+    <h1 class="text-4xl font-extrabold text-white mt-2">$27,678.00</h1>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="grid grid-cols-3 gap-4 text-center mb-8">
+    <button onclick="goToPage('withdraw.html')" class="bg-blue-700 hover:bg-blue-800 py-3 rounded-xl shadow-lg text-sm font-semibold">
+      <i class="fas fa-arrow-up mb-1"></i><br data-translate="withdraw">Withdraw
+    </button>
+    <button onclick="goToPage('addfunds.html')" class="bg-green-600 hover:bg-green-700 py-3 rounded-xl shadow-lg text-sm font-semibold">
+  <i class="fas fa-plus mb-1"></i><br data-translate="add_funds">Add Funds
+    </button>
+   <button onclick="goToPage('serialid.html')" class="bg-purple-700 hover:bg-purple-800 py-3 rounded-xl shadow-lg text-sm font-semibold">
+  <i class="fas fa-id-badge mb-1"></i><br><span data-translate="serial_id">Serial ID</span>
+  </button>
+  </div>
+
+  <!-- Wallet Assets -->
+  <div>
+    <h2 class="text-lg font-bold mb-3" data-translate="assets">Assets</h2>
+    <div class="space-y-3">
+      <!-- Asset Template (fixing image links using CDN direct links that work) -->
+      <div class="flex justify-between bg-[#1f2937] p-4 rounded-xl shadow">
+        <div class="flex items-center space-x-2">
+          <img src="https://assets.coingecko.com/coins/images/1/large/bitcoin.png" alt="BTC" class="w-6 h-6">
+          <div>
+            <p class="text-sm font-bold">Bitcoin</p>
+            <p class="text-xs text-gray-400">BTC</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="font-bold">0.5421 BTC</p>
+          <p class="text-sm text-gray-400">$15,300.00</p>
+        </div>
+      </div>
+      <div class="flex justify-between bg-[#1f2937] p-4 rounded-xl shadow">
+        <div class="flex items-center space-x-2">
+          <img src="https://assets.coingecko.com/coins/images/279/large/ethereum.png" alt="ETH" class="w-6 h-6">
+          <div>
+            <p class="text-sm font-bold">Ethereum</p>
+            <p class="text-xs text-gray-400">ETH</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="font-bold">2.893 ETH</p>
+          <p class="text-sm text-gray-400">$9,120.00</p>
+        </div>
+      </div>
+      <div class="flex justify-between bg-[#1f2937] p-4 rounded-xl shadow">
+        <div class="flex items-center space-x-2">
+          <img src="https://assets.coingecko.com/coins/images/325/large/Tether.png" alt="USDT" class="w-6 h-6">
+          <div>
+            <p class="text-sm font-bold">Tether</p>
+            <p class="text-xs text-gray-400">USDT</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="font-bold">3,258.00 USDT</p>
+          <p class="text-sm text-gray-400">$3,258.00</p>
+        </div>
+      </div>
+      <div class="flex justify-between bg-[#1f2937] p-4 rounded-xl shadow">
+        <div class="flex items-center space-x-2">
+          <img src="https://assets.coingecko.com/coins/images/825/large/binance-coin-logo.png" alt="BNB" class="w-6 h-6">
+          <div>
+            <p class="text-sm font-bold">Binance Coin</p>
+            <p class="text-xs text-gray-400">BNB</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="font-bold">1.242 BNB</p>
+          <p class="text-sm text-gray-400">$320.00</p>
+        </div>
+      </div>
+      <div class="flex justify-between bg-[#1f2937] p-4 rounded-xl shadow">
+        <div class="flex items-center space-x-2">
+          <img src="https://assets.coingecko.com/coins/images/2/large/litecoin.png" alt="LTC" class="w-6 h-6">
+          <div>
+            <p class="text-sm font-bold">Litecoin</p>
+            <p class="text-xs text-gray-400">LTC</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="font-bold">4.150 LTC</p>
+          <p class="text-sm text-gray-400">$440.00</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function goToPage(page) {
+      window.location.href = page;
+    }
+
+    const translations = {
+      es: {
+        krypton_wallet: "Cartera Krypton",
+        secure_vault: "Tu bóveda segura de criptomonedas",
+        available_balance: "Saldo Disponible",
+        withdraw: "Retirar",
+        add_funds: "Agregar Fondos",
+        serial_id: "ID de Serie",
+        assets: "Activos"
+      },
+      fr: {
+        krypton_wallet: "Portefeuille Krypton",
+        secure_vault: "Votre coffre-fort crypto sécurisé",
+        available_balance: "Solde Disponible",
+        withdraw: "Retrait",
+        add_funds: "Ajouter Fonds",
+        serial_id: "ID de Série",
+        assets: "Actifs"
+      },
+      de: {
+        krypton_wallet: "Krypton Brieftasche",
+        secure_vault: "Ihr sicherer Krypto-Tresor",
+        available_balance: "Verfügbares Guthaben",
+        withdraw: "Abheben",
+        add_funds: "Geld Hinzufügen",
+        serial_id: "Serien-ID",
+        assets: "Vermögenswerte"
+      },
+      pt: {
+        krypton_wallet: "Carteira Krypton",
+        secure_vault: "Seu cofre criptografado seguro",
+        available_balance: "Saldo Disponível",
+        withdraw: "Sacar",
+        add_funds: "Adicionar Fundos",
+        serial_id: "ID de Série",
+        assets: "Ativos"
+      },
+      ko: {
+        krypton_wallet: "크립톤 지갑",
+        secure_vault: "안전한 암호화폐 금고",
+        available_balance: "사용 가능 잔액",
+        withdraw: "출금",
+        add_funds: "자금 추가",
+        serial_id: "일련 번호",
+        assets: "자산"
+      },
+      ru: {
+        krypton_wallet: "Кошелёк Криптон",
+        secure_vault: "Ваш безопасный криптовалютный сейф",
+        available_balance: "Доступный баланс",
+        withdraw: "Вывод",
+        add_funds: "Добавить средства",
+        serial_id: "Серийный номер",
+        assets: "Активы"
+      },
+      ro: {
+        krypton_wallet: "Portofel Krypton",
+        secure_vault: "Seiful tău cripto securizat",
+        available_balance: "Sold Disponibil",
+        withdraw: "Retragere",
+        add_funds: "Adaugă Fonduri",
+        serial_id: "ID Serial",
+        assets: "Active"
+      }
+    };
+
+    document.getElementById('languageSelector').addEventListener('change', (e) => {
+      const lang = e.target.value;
+      const texts = document.querySelectorAll('[data-translate]');
+      texts.forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+          el.innerText = translations[lang][key];
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
+
+

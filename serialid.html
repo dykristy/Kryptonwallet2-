@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Krypton Wallet - Serial ID</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+      font-family: 'Segoe UI', sans-serif;
+    }
+  </style>
+</head>
+<body class="text-white p-4">
+
+  <!-- Language Selector -->
+  <div class="flex justify-end mb-4">
+    <select id="langSelect" class="bg-gray-800 p-2 rounded text-sm">
+      <option value="en">English</option>
+      <option value="pt">Português</option>
+      <option value="de">Deutsch</option>
+      <option value="es">Español</option>
+    </select>
+  </div>
+
+  <!-- Page Title -->
+  <h1 class="text-xl font-bold text-yellow-400 mb-6" data-translate="serial_id_title">Serial ID</h1>
+
+  <!-- Serial ID Card -->
+  <div class="bg-gray-900 border border-red-500 p-6 rounded-xl text-center shadow-lg mb-6">
+    <p class="text-sm font-semibold mb-2 text-red-400" data-translate="serial_id_status">Serial ID:</p>
+    <p class="text-base text-red-500 font-bold" data-translate="no_serial">You have no valid serial ID</p>
+  </div>
+
+  <!-- Get Serial ID Button -->
+  <div class="text-center">
+    <a href="https://t.me/Kryptonplans" target="_blank" class="px-5 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl text-white font-semibold text-sm" data-translate="get_serial">Get Serial ID</a>
+  </div>
+
+  <script>
+    const translations = {
+      pt: {
+        serial_id_title: "ID de Série",
+        serial_id_status: "ID de Série:",
+        no_serial: "Você não tem um ID de série válido",
+        get_serial: "Obter ID de Série"
+      },
+      de: {
+        serial_id_title: "Seriennummer",
+        serial_id_status: "Seriennummer:",
+        no_serial: "Sie haben keine gültige Seriennummer",
+        get_serial: "Seriennummer erhalten"
+      },
+      es: {
+        serial_id_title: "ID de Serie",
+        serial_id_status: "ID de Serie:",
+        no_serial: "No tienes un ID de serie válido",
+        get_serial: "Obtener ID de serie"
+      }
+    };
+
+    document.getElementById('langSelect').addEventListener('change', function () {
+      const lang = this.value;
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (translations[lang]?.[key]) {
+          el.innerText = translations[lang][key];
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
+
+

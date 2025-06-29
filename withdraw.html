@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Krypton Wallet - Withdraw</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .hidden { display: none; }
+    .slide-up { transition: transform 0.3s ease-in-out; transform: translateY(100%); }
+    .slide-up.show { transform: translateY(0); }
+  </style>
+</head>
+<body class="text-white p-4">
+
+  <!-- Language Selector -->
+  <div class="flex justify-end mb-2">
+    <select id="langSelect" class="bg-gray-800 p-2 rounded text-sm">
+      <option value="en">English</option>
+      <option value="pt">Português</option>
+      <option value="de">Deutsch</option>
+      <option value="es">Español</option>
+      <option value="ru">Русский</option>
+      <option value="ko">한국어</option>
+    </select>
+  </div>
+
+  <!-- Page Title -->
+  <h1 class="text-xl font-bold text-blue-400 mb-4" data-translate="withdraw_title">Withdraw</h1>
+
+  <!-- Country Selector -->
+  <label class="block text-sm mb-1" data-translate="select_country">Select Country</label>
+  <select id="country" class="w-full p-3 rounded bg-gray-800 mb-4">
+    <option value="">-- Select --</option>
+    <option value="Brazil">Brazil</option>
+    <option value="USA">USA</option>
+    <option value="Germany">Germany</option>
+    <option value="Italy">Italy</option>
+    <option value="Australia">Australia</option>
+    <option value="Nigeria">Nigeria</option>
+    <option value="El Salvador">El Salvador</option>
+    <option value="Guatemala">Guatemala</option>
+    <option value="Spain">Spain</option>
+    <option value="Norway">Norway</option>
+    <option value="Romania">Romania</option>
+    <option value="Russia">Russia</option>
+    <option value="South Korea">South Korea</option>
+  </select>
+
+  <!-- Balance and Amount -->
+  <label class="block text-sm mb-1" data-translate="withdraw_amount">Amount to Withdraw (USD)</label>
+  <input id="usdAmount" type="number" placeholder="$0.00" class="w-full p-3 rounded bg-gray-800 mb-2">
+  <p id="converted" class="text-sm text-green-400 mb-4"></p>
+
+  <!-- Payment Method Selector -->
+  <label class="block text-sm mb-1" data-translate="select_method">Select Payment Method</label>
+  <select id="method" class="w-full p-3 rounded bg-gray-800 mb-4"></select>
+
+  <!-- Account Details -->
+  <input id="accName" type="text" placeholder="Account Holder Name" class="w-full p-3 rounded bg-gray-800 mb-2">
+  <input id="accNumber" type="text" placeholder="Account Number / PayPal" class="w-full p-3 rounded bg-gray-800 mb-4">
+
+  <!-- Confirm Button -->
+  <button onclick="openPinPopup()" class="w-full bg-blue-600 p-3 rounded-xl font-semibold">Confirm</button>
+
+  <!-- PIN Popup -->
+  <div id="pinPopup" class="fixed bottom-0 left-0 right-0 bg-[#111827] p-6 rounded-t-3xl slide-up hidden">
+    <p class="text-center mb-2" data-translate="enter_pin">Enter Withdrawal PIN</p>
+    <input id="pinInput" type="password" maxlength="4" placeholder="4-digit PIN" class="w-full text-center p-3 rounded-xl bg-gray-800">
+    <p id="pinError" class="text-red-500 text-center text-sm hidden mt-1">Incorrect PIN</p>
+    <button id="sendBtn" onclick="sendWithdraw()" disabled class="w-full mt-4 bg-gray-600 p-3 rounded-xl font-semibold">Send</button>
+  </div>
+
+  <script>
+    const countrySelect = document.getElementById('country');
+    const methodSelect = document.getElementById('method');
+    const usdInput = document.getElementById('usdAmount');
+    const converted = document.getElementById('converted');
+    const exchangeRates = {
+      Brazil: 5.12,
+      USA: 1,
+      Germany: 0.92,
+      Italy: 0.92,
+      Australia: 1.48,
+      Nigeria: 1500,
+      "El Salvador": 1,
+      Guatemala: 7.8,
+      Spain: 0.92,
+      Norway: 10.7,
+      Romania: 4.6,
+      Russia: 89,
+      "South Korea": 1375
+    };
+
+    const methods = {
+      Brazil: ['PIX', 'Paxful', 'PayPal'],
+      USA: ['ACH Bank Transfer', 'PayPal', 'CashApp'],
+      Germany: ['SEPA Bank', 'PayPal', 'Revolut'],
+      Italy: ['Wise', 'PayPal', 'N26'],
+      Australia: ['Bank Transfer', 'PayPal', 'BeemIt'],
+      Nigeria: ['Opay', 'PalmPay', 'Moniepoint', 'UBA', 'GTBank', 'Zenith Bank', 'Access Bank'],
+      "El Salvador": ['Banco Agricola', 'Chivo Wallet', 'PayPal'],
+      Guatemala: ['Banco Agricola', 'Chivo Wallet', 'PayPal'],
+      Spain: ['CaixaBank', 'BBVA', 'PayPal'],
+      Norway: ['DNB', 'Vipps', 'PayPal'],
+      Romania: ['Banca Transilvania', 'PayPal'],
+      Russia: ['QIWI', 'Sberbank', 'PayPal'],
+      "South Korea": ['KakaoPay', 'Naver Pay', 'Shinhan Bank']
+    };
+
+    countrySelect.addEventListener('change', () => {
+      const country = countrySelect.value;
+      methodSelect.innerHTML = '';
+      methods[country]?.forEach(method => {
+        const opt = document.createElement('option');
+        opt.value = method;
+        opt.innerText = method;
+        methodSelect.appendChild(opt);
+      });
+      updateConversion();
+    });
+
+    usdInput.addEventListener('input', updateConversion);
+
+    function updateConversion() {
+      const usd = parseFloat(usdInput.value);
+      const rate = exchangeRates[countrySelect.value];
+      if (!isNaN(usd) && rate) {
+        const convertedVal = (usd * rate).toFixed(2);
+        converted.innerText = `≈ ${convertedVal} ${countrySelect.value} currency`;
+      } else {
+        converted.innerText = '';
+      }
+    }
+
+    function openPinPopup() {
+      document.getElementById('pinPopup').classList.remove('hidden');
+      setTimeout(() => document.getElementById('pinPopup').classList.add('show'), 50);
+    }
+
+    document.getElementById('pinInput').addEventListener('input', (e) => {
+      const pin = e.target.value;
+      const sendBtn = document.getElementById('sendBtn');
+      if (pin === '0080') {
+        sendBtn.disabled = false;
+        sendBtn.classList.remove('bg-gray-600');
+        sendBtn.classList.add('bg-green-600');
+        document.getElementById('pinError').classList.add('hidden');
+      } else {
+        sendBtn.disabled = true;
+        sendBtn.classList.add('bg-gray-600');
+        sendBtn.classList.remove('bg-green-600');
+        if (pin.length === 4) document.getElementById('pinError').classList.remove('hidden');
+        else document.getElementById('pinError').classList.add('hidden');
+      }
+    });
+
+    function sendWithdraw() {
+      const country = document.getElementById('country').value;
+      const usd = document.getElementById('usdAmount').value;
+      const method = document.getElementById('method').value;
+      const name = document.getElementById('accName').value;
+      const number = document.getElementById('accNumber').value;
+      const rate = exchangeRates[country];
+      const convertedVal = (parseFloat(usd) * rate).toFixed(2);
+
+      localStorage.setItem("country", country);
+      localStorage.setItem("usd", usd);
+      localStorage.setItem("converted", `≈ ${convertedVal} ${country} currency`);
+      localStorage.setItem("method", method);
+      localStorage.setItem("bank", method);
+      localStorage.setItem("accName", name);
+      localStorage.setItem("accNum", number);
+
+      window.location.href = 'withdrawalstatus.html';
+    }
+
+    const translations = {
+      pt: {
+        withdraw_title: "Saque",
+        select_country: "Escolha o país",
+        withdraw_amount: "Quantia para sacar (USD)",
+        select_method: "Escolha o método de retirada",
+        enter_pin: "Digite o PIN para saque"
+      },
+      de: {
+        withdraw_title: "Abheben",
+        select_country: "Land auswählen",
+        withdraw_amount: "Betrag zum Abheben (USD)",
+        select_method: "Zahlungsmethode wählen",
+        enter_pin: "PIN für Abhebung eingeben"
+      },
+      es: {
+        withdraw_title: "Retirar",
+        select_country: "Seleccionar país",
+        withdraw_amount: "Monto a retirar (USD)",
+        select_method: "Seleccionar método de retiro",
+        enter_pin: "Ingrese el PIN de retiro"
+      },
+      ru: {
+        withdraw_title: "Вывод средств",
+        select_country: "Выберите страну",
+        withdraw_amount: "Сумма для вывода (USD)",
+        select_method: "Выберите метод оплаты",
+        enter_pin: "Введите PIN-код для вывода"
+      },
+      ko: {
+        withdraw_title: "출금",
+        select_country: "국가 선택",
+        withdraw_amount: "출금 금액 (USD)",
+        select_method: "출금 방법 선택",
+        enter_pin: "출금 PIN 입력"
+      }
+    };
+
+    document.getElementById('langSelect').addEventListener('change', (e) => {
+      const lang = e.target.value;
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (translations[lang]?.[key]) {
+          el.innerText = translations[lang][key];
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
+
+

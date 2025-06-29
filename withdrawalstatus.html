@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Withdrawal Status - Krypton Wallet</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .receipt {
+      border: 1px solid #374151;
+      background-color: #111827;
+    }
+  </style>
+</head>
+<body class="text-white p-4">
+
+  <!-- Language Selector -->
+  <div class="flex justify-end mb-4">
+    <select id="langSelect" class="bg-gray-800 p-2 rounded text-sm">
+      <option value="en">English</option>
+      <option value="pt">Português</option>
+      <option value="de">Deutsch</option>
+      <option value="es">Español</option>
+    </select>
+  </div>
+
+  <!-- Title -->
+  <h1 class="text-xl font-bold text-green-400 mb-4" data-translate="withdrawal_status">Withdrawal Status</h1>
+
+  <!-- Receipt -->
+  <div class="receipt p-5 rounded-xl mb-6">
+    <p class="text-sm mb-2"><strong data-translate="country">Country</strong>: <span id="receiptCountry">-</span></p>
+    <p class="text-sm mb-2"><strong data-translate="amount_usd">Amount (USD)</strong>: $<span id="receiptAmount">-</span></p>
+    <p class="text-sm mb-2"><strong data-translate="converted">Converted</strong>: <span id="receiptConverted">-</span></p>
+    <p class="text-sm mb-2"><strong data-translate="method">Method</strong>: <span id="receiptMethod">-</span></p>
+    <p class="text-sm mb-2"><strong data-translate="account_name">Account Name</strong>: <span id="receiptName">-</span></p>
+    <p class="text-sm mb-2"><strong data-translate="account_number">Account Number</strong>: <span id="receiptNumber">-</span></p>
+    <p class="text-sm mb-4"><strong data-translate="bank">Bank</strong>: <span id="receiptBank">-</span></p>
+    <p class="text-center text-yellow-400 font-bold text-lg">PENDING</p>
+  </div>
+
+  <!-- Serial ID Section -->
+  <div class="bg-gray-900 p-5 rounded-xl mb-4">
+    <p class="text-sm mb-2" data-translate="serial_required">You require a valid serial ID to complete this withdrawal.</p>
+    <input id="serialInput" type="text" placeholder="Enter Serial ID" class="w-full p-3 rounded bg-gray-800 mb-2">
+    <button onclick="validateSerial()" class="w-full bg-blue-600 p-3 rounded-xl font-semibold">OK</button>
+    <p id="serialError" class="text-red-500 mt-2 hidden" data-translate="invalid_serial">Not a valid serial ID.</p>
+  </div>
+
+  <!-- Get Serial ID -->
+  <div class="text-center">
+    <a href="https://t.me/Kryptonplans" target="_blank" class="px-4 py-2 bg-blue-700 hover:bg-blue-800 rounded-xl text-white font-semibold text-sm" data-translate="get_serial">Get Serial ID</a>
+  </div>
+
+  <script>
+    // Load saved withdrawal data from localStorage
+    document.getElementById('receiptCountry').innerText = localStorage.getItem('country') || '-';
+    document.getElementById('receiptAmount').innerText = localStorage.getItem('usd') || '-';
+    document.getElementById('receiptConverted').innerText = localStorage.getItem('converted') || '-';
+    document.getElementById('receiptMethod').innerText = localStorage.getItem('method') || '-';
+    document.getElementById('receiptName').innerText = localStorage.getItem('accName') || '-';
+    document.getElementById('receiptNumber').innerText = localStorage.getItem('accNum') || '-';
+    document.getElementById('receiptBank').innerText = localStorage.getItem('bank') || '-';
+
+    function validateSerial() {
+      const input = document.getElementById('serialInput').value.trim();
+      const error = document.getElementById('serialError');
+      if (input === '') return;
+      error.classList.remove('hidden');
+    }
+
+    const translations = {
+      pt: {
+        withdrawal_status: "Status de Saque",
+        country: "País",
+        amount_usd: "Quantia (USD)",
+        converted: "Convertido",
+        method: "Método",
+        account_name: "Nome do Titular",
+        account_number: "Número da Conta",
+        bank: "Banco",
+        serial_required: "Você precisa de um ID de série válido para concluir este saque.",
+        invalid_serial: "ID de série inválido.",
+        get_serial: "Obter ID de Série"
+      },
+      de: {
+        withdrawal_status: "Abhebungsstatus",
+        country: "Land",
+        amount_usd: "Betrag (USD)",
+        converted: "Umgerechnet",
+        method: "Methode",
+        account_name: "Kontoinhaber",
+        account_number: "Kontonummer",
+        bank: "Bank",
+        serial_required: "Sie benötigen eine gültige Serien-ID, um diese Abhebung abzuschließen.",
+        invalid_serial: "Keine gültige Serien-ID.",
+        get_serial: "Serien-ID erhalten"
+      },
+      es: {
+        withdrawal_status: "Estado del Retiro",
+        country: "País",
+        amount_usd: "Monto (USD)",
+        converted: "Convertido",
+        method: "Método",
+        account_name: "Nombre del titular",
+        account_number: "Número de cuenta",
+        bank: "Banco",
+        serial_required: "Necesita un ID de serie válido para completar este retiro.",
+        invalid_serial: "ID de serie no válida.",
+        get_serial: "Obtener ID de serie"
+      }
+    };
+
+    document.getElementById('langSelect').addEventListener('change', function () {
+      const lang = this.value;
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (translations[lang]?.[key]) {
+          el.innerText = translations[lang][key];
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
+
+
