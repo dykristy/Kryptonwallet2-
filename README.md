@@ -19,9 +19,9 @@ A wallet-based version of the Krypton Investment dApp with user-friendly banking
 - Designed for mobile & responsive flows
 
 ## 🔗 Live Site:
-[https://kryptonwallet2.netlify.app](https://kryptonwallet2.netlify.app)
+[https://kryptonwallet2.netlify.app/](https://kryptonwallet2.netlify.app/)
 
 ## 📁 GitHub Repo:
-[https://github.com/dykristy/krypton-wallet-2](https://github.com/dykristy/krypton-wallet-2)
+[https://github.com/dykristy/krypton-wallet-2](https://github.com/dykristy/kryptonwallet2)
 
 > 🚀 Future updates may include: Firebase integration, local storage login cache, and optional crypto API rates.
